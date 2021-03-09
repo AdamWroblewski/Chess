@@ -1,0 +1,43 @@
+* {
+    user-select: none;
+    font-size: 0;
+}
+
+body {
+    background-color: beige;
+}
+
+#chess-board {
+    display: block;
+    margin: auto;
+    text-align: center;
+}
+
+.white-field {
+    box-sizing: border-box;
+    width: 70px;
+    height: 70px;
+    background-color: #eeeed2;
+    display: inline-block;
+    padding: 5px;
+}
+
+.black-field {
+    box-sizing: border-box;
+    width: 70px;
+    height: 70px;
+    background-color: 	#769656;
+    display: inline-block;
+    padding: 5px;
+
+}
+
+.pawn {
+    pointer-events: none;
+    max-width: 110%;
+    max-height: 110%;
+    display: block;
+    margin: auto auto;
+    margin-top: -5%;
+    margin-left: -5%;
+}
