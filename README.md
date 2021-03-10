@@ -2,6 +2,7 @@
 
 ## About The Project
 It may take few seconds to start up application
+* [Link to application](https://chessgame.azurewebsites.net/)
 
 ![image](images/chess.png)
 
