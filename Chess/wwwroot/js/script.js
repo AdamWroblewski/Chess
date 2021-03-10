@@ -137,6 +137,21 @@ let generateBoard = function () {
                 boardDiv.insertAdjacentHTML("beforeend", '<div></div>')
         }
     }
+    isKingUnderAttack();
+}
+
+let isKingUnderAttack = function () {
+    if (currentPlayer === 'white') {
+        if (isFieldUnderAttack(whiteKing.currentRow, whiteKing.currentCol)) {
+            let field = document.querySelector(`[data-row="${whiteKing.currentRow}"][data-col="${whiteKing.currentCol}"]`)
+            field.style.backgroundColor = 'red';
+        }
+    } else if (currentPlayer === 'black') {
+        if (isFieldUnderAttack(blackKing.currentRow, blackKing.currentCol)) {
+            let field = document.querySelector(`[data-row="${blackKing.currentRow}"][data-col="${blackKing.currentCol}"]`)
+            field.style.backgroundColor = 'red';
+        }
+    }
 }
 
 let catchPawn = function (pawn) {
@@ -408,6 +423,7 @@ let makeMove = function (pickedPawn, row, col, newRow, newCol) {
             }
             generateBoard();
             changePlayer();
+            isKingUnderAttack();
             return true;
         } else {
             chessFields = tempChessField;
@@ -433,6 +449,7 @@ let makeMove = function (pickedPawn, row, col, newRow, newCol) {
         changePawnToQueen(pickedPawn, newRow, newCol)
         generateBoard();
         changePlayer();
+        isKingUnderAttack();
 
         if (pickedPawn.chessPiece === "pawn" && Math.abs(row - newRow) === 2) // 6 - 4 || 1 - 3
             lastlyMovedPawnCords = [newRow, newCol];
