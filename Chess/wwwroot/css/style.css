@@ -7,9 +7,29 @@ body {
     background-color: beige;
 }
 
+#button {
+    font-size: 20px;
+}
+
+#control-panel {
+    float: left;
+    border: 1px solid #0b2e13;
+    height: 500px;
+    padding: 30px;
+    margin-left: 150px;
+}
+
 #chess-board {
-    display: block;
-    margin: auto;
+    float: left;
+
+    display: inline-block;
+}
+
+#float-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
     text-align: center;
 }
 
@@ -26,7 +46,7 @@ body {
     box-sizing: border-box;
     width: 70px;
     height: 70px;
-    background-color: 	#769656;
+    background-color: #769656;
     display: inline-block;
     padding: 5px;
 

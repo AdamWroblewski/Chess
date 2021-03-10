@@ -1,99 +1,124 @@
-let currentPlayer = "white";
-let secondPlayer = "black";
+let currentPlayer;
+let secondPlayer;
+let lastlyMovedPawnCords;
+let pathsToChessPieces;
+let blackKing;
+let whiteKing;
+let whitePawns;
+let blackPawns;
+let emptyFields
+let chessFields;
 
-let lastlyMovedPawnCords = [-1, -1];
+let setDefaultGameParameters = function () {
+    currentPlayer = "white";
+    secondPlayer = "black";
 
-let pathsToChessPieces = {
-    bB: 'Sprites/bB.png',
-    wB: 'Sprites/wB.png',
-    bP: 'Sprites/bP.png',
-    wP: 'Sprites/wP.png',
-    bR: 'Sprites/bR.png',
-    wR: 'Sprites/wR.png',
-    bQ: 'Sprites/bQ.png',
-    wQ: 'Sprites/wQ.png',
-    bK: 'Sprites/bK.png',
-    wK: 'Sprites/wK.png',
-    bN: 'Sprites/bN.png',
-    wN: 'Sprites/wN.png'
+    lastlyMovedPawnCords = [-1, -1];
+
+    pathsToChessPieces = {
+        bB: 'Sprites/bB.png',
+        wB: 'Sprites/wB.png',
+        bP: 'Sprites/bP.png',
+        wP: 'Sprites/wP.png',
+        bR: 'Sprites/bR.png',
+        wR: 'Sprites/wR.png',
+        bQ: 'Sprites/bQ.png',
+        wQ: 'Sprites/wQ.png',
+        bK: 'Sprites/bK.png',
+        wK: 'Sprites/wK.png',
+        bN: 'Sprites/bN.png',
+        wN: 'Sprites/wN.png'
+    }
+
+    blackKing = {
+        chessPiece: 'king', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bK'],
+        currentRow: 0, currentCol: 4
+    };
+
+    whiteKing = {
+        chessPiece: 'king', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wK'],
+        currentRow: 7, currentCol: 4
+    };
+
+    whitePawns = [
+        [{chessPiece: 'pawn', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wP']},
+            {chessPiece: 'pawn', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wP']},
+            {chessPiece: 'pawn', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wP']},
+            {chessPiece: 'pawn', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wP']},
+            {chessPiece: 'pawn', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wP']},
+            {chessPiece: 'pawn', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wP']},
+            {chessPiece: 'pawn', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wP']},
+            {chessPiece: 'pawn', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wP']}],
+        [{chessPiece: 'rook', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wR']},
+            {chessPiece: 'knight', color: 'white', pathToImg: pathsToChessPieces['wN']},
+            {chessPiece: 'bishop', color: 'white', pathToImg: pathsToChessPieces['wB']},
+            {chessPiece: 'queen', color: 'white', pathToImg: pathsToChessPieces['wQ']},
+            whiteKing,
+            {chessPiece: 'bishop', color: 'white', pathToImg: pathsToChessPieces['wB']},
+            {chessPiece: 'knight', color: 'white', pathToImg: pathsToChessPieces['wN']},
+            {chessPiece: 'rook', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wR']}]
+    ]
+
+    blackPawns = [
+        [{chessPiece: 'rook', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bR']},
+            {chessPiece: 'knight', color: 'black', pathToImg: pathsToChessPieces['bN']},
+            {chessPiece: 'bishop', color: 'black', pathToImg: pathsToChessPieces['bB']},
+            {chessPiece: 'queen', color: 'black', pathToImg: pathsToChessPieces['bQ']},
+            blackKing,
+            {chessPiece: 'bishop', color: 'black', pathToImg: pathsToChessPieces['bB']},
+            {chessPiece: 'knight', color: 'black', pathToImg: pathsToChessPieces['bN']},
+            {chessPiece: 'rook', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bR']}],
+        [{chessPiece: 'pawn', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bP']},
+            {chessPiece: 'pawn', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bP']},
+            {chessPiece: 'pawn', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bP']},
+            {chessPiece: 'pawn', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bP']},
+            {chessPiece: 'pawn', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bP']},
+            {chessPiece: 'pawn', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bP']},
+            {chessPiece: 'pawn', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bP']},
+            {chessPiece: 'pawn', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bP']}]
+    ]
+
+    emptyFields = [
+        [{chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {
+            chessPiece: '',
+            color: ''
+        },
+            {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {
+            chessPiece: '',
+            color: ''
+        }],
+        [{chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {
+            chessPiece: '',
+            color: ''
+        },
+            {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {
+            chessPiece: '',
+            color: ''
+        }],
+        [{chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {
+            chessPiece: '',
+            color: ''
+        },
+            {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {
+            chessPiece: '',
+            color: ''
+        }],
+        [{chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {
+            chessPiece: '',
+            color: ''
+        },
+            {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {
+            chessPiece: '',
+            color: ''
+        }]
+    ]
+
+    chessFields = [
+        blackPawns[0], blackPawns[1],
+        emptyFields[0], emptyFields[1], emptyFields[2], emptyFields[3],
+        whitePawns[0], whitePawns[1]
+    ]
 }
-
-let blackKing = {
-    chessPiece: 'king', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bK'],
-    currentRow: 0, currentCol: 4
-};
-
-let whiteKing = {
-    chessPiece: 'king', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wK'],
-    currentRow: 7, currentCol: 4
-};
-
-let whitePawns = [
-    [{chessPiece: 'pawn', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wP']},
-        {chessPiece: 'pawn', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wP']},
-        {chessPiece: 'pawn', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wP']},
-        {chessPiece: 'pawn', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wP']},
-        {chessPiece: 'pawn', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wP']},
-        {chessPiece: 'pawn', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wP']},
-        {chessPiece: 'pawn', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wP']},
-        {chessPiece: 'pawn', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wP']}],
-    [{chessPiece: 'rook', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wR']},
-        {chessPiece: 'knight', color: 'white', pathToImg: pathsToChessPieces['wN']},
-        {chessPiece: 'bishop', color: 'white', pathToImg: pathsToChessPieces['wB']},
-        {chessPiece: 'queen', color: 'white', pathToImg: pathsToChessPieces['wQ']},
-        whiteKing,
-        {chessPiece: 'bishop', color: 'white', pathToImg: pathsToChessPieces['wB']},
-        {chessPiece: 'knight', color: 'white', pathToImg: pathsToChessPieces['wN']},
-        {chessPiece: 'rook', color: 'white', isMoved: false, pathToImg: pathsToChessPieces['wR']}]
-]
-
-blackPawns = [
-    [{chessPiece: 'rook', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bR']},
-        {chessPiece: 'knight', color: 'black', pathToImg: pathsToChessPieces['bN']},
-        {chessPiece: 'bishop', color: 'black', pathToImg: pathsToChessPieces['bB']},
-        {chessPiece: 'queen', color: 'black', pathToImg: pathsToChessPieces['bQ']},
-        blackKing,
-        {chessPiece: 'bishop', color: 'black', pathToImg: pathsToChessPieces['bB']},
-        {chessPiece: 'knight', color: 'black', pathToImg: pathsToChessPieces['bN']},
-        {chessPiece: 'rook', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bR']}],
-    [{chessPiece: 'pawn', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bP']},
-        {chessPiece: 'pawn', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bP']},
-        {chessPiece: 'pawn', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bP']},
-        {chessPiece: 'pawn', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bP']},
-        {chessPiece: 'pawn', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bP']},
-        {chessPiece: 'pawn', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bP']},
-        {chessPiece: 'pawn', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bP']},
-        {chessPiece: 'pawn', color: 'black', isMoved: false, pathToImg: pathsToChessPieces['bP']}]
-]
-
-emptyFields = [
-    [{chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''},
-        {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {
-        chessPiece: '',
-        color: ''
-    }],
-    [{chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''},
-        {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {
-        chessPiece: '',
-        color: ''
-    }],
-    [{chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''},
-        {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {
-        chessPiece: '',
-        color: ''
-    }],
-    [{chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''},
-        {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {chessPiece: '', color: ''}, {
-        chessPiece: '',
-        color: ''
-    }]
-]
-
-let chessFields = [
-    blackPawns[0], blackPawns[1],
-    emptyFields[0], emptyFields[1], emptyFields[2], emptyFields[3],
-    whitePawns[0], whitePawns[1]
-]
 
 const bishopDirections = [
     [1, 1], [-1, -1], [-1, 1], [1, -1]
@@ -108,6 +133,9 @@ const knightMoves = [
 ]
 
 let game = function () {
+    const button = document.getElementById("button");
+    button.addEventListener("click", game);
+    setDefaultGameParameters();
     generateBoard();
 }
 
