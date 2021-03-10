@@ -1,6 +1,7 @@
 # Chess#
 
 ## About The Project
+It may take few seconds to start up application
 
 ![image](images/chess.png)
 
