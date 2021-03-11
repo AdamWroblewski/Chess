@@ -18,4 +18,4 @@ It may take few seconds to start up application
 ## Usage
 
 After the page loads, a checkerboard is displayed. To move a pawn, click on it, then choose one of the possible squares on the board and click on it.
-to start a new game refresh the page.
+to start a new game just click the "New game" button.
